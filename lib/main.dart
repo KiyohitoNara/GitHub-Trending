@@ -16,7 +16,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -76,16 +75,6 @@ class _RepositoriesPage extends StatelessWidget {
                 overflow: TextOverflow.fade,
               ),
               onTap: () {
-                if (kIsWeb) {
-                  _scaffoldKey.currentState.showSnackBar(
-                    SnackBar(
-                      content: Text('Currently not supported.'),
-                    ),
-                  );
-
-                  return;
-                }
-
                 launch(repositories[index].url);
               },
             );
