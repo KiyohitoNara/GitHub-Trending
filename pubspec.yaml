@@ -1,7 +1,7 @@
 name: github_trending
 description: Flutter for Web example.
 
-version: 1.0.0
+version: 1.1.0
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
