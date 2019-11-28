@@ -16,8 +16,10 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
 }
 
 class _RepositoriesPage extends StatelessWidget {
+  static const _menus = ['About'];
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -44,8 +48,44 @@ class _RepositoriesPage extends StatelessWidget {
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Repositories'),
+          actions: <Widget>[_buildAppBarPopupMenu(context)],
         ),
         body: _buildList());
+  }
+
+  Widget _buildAppBarPopupMenu(BuildContext context) {
+    return PopupMenuButton<String>(
+      itemBuilder: (context) {
+        return _menus.map((menu) {
+          return PopupMenuItem(
+            value: menu,
+            child: Text(menu),
+          );
+        }).toList();
+      },
+      onSelected: (value) {
+        if (value == _menus[0]) {
+          if (kIsWeb) {
+            _scaffoldKey.currentState.showSnackBar(
+              SnackBar(
+                content: Text('Developed by Kiyohito Nara'),
+              ),
+            );
+
+            return;
+          }
+
+          PackageInfo.fromPlatform().then((packageInfo) {
+            showAboutDialog(
+                context: context,
+                applicationName: packageInfo.appName,
+                applicationVersion: packageInfo.version,
+                applicationIcon: Icon(Icons.info),
+                applicationLegalese: 'Developed by Kiyohito Nara');
+          });
+        }
+      },
+    );
   }
 
   Widget _buildList() {
